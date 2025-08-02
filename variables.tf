@@ -18,7 +18,7 @@ variable "subnet_name" {
 }
 
 variable "bucket_name" {
-  type = string
+  type    = string
   default = "brahim-bucket-storage"
 }
 
