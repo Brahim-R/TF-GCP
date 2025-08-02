@@ -35,7 +35,7 @@ resource "google_compute_instance" "default" {
     }
   }
   network_interface {
-    subnetwork = data.google_compute_subnetwork.existing_subnet
+    subnetwork = data.google_compute_subnetwork.existing_subnet.self_link
   }
 }
 
@@ -91,7 +91,7 @@ resource "google_secret_manager_secret_version" "my_secret_version" {
 resource "google_compute_firewall" "postgres-rules" {
   project     = var.project_id
   name        = var.fw_rule
-  network     = data.google_compute_network.existing_vpc
+  network     = data.google_compute_network.existing_vpc.self_link
   description = "Creates firewall rule for postgres"
 
   allow {
