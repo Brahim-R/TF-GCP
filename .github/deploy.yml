@@ -1,0 +1,54 @@
+name: Deploy Terraform to GCP
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  terraform:
+    name: Terraform Deployment
+    runs-on: ubuntu-latest
+
+    env:
+      TF_VAR_project_id: ${{ secrets.GCP_PROJECT_ID }}
+      TF_VAR_bucket_name: ${{ secrets.TF_VAR_BUCKET_NAME }}
+      TF_VAR_vm_name: ${{ secrets.TF_VAR_VM_NAME }}
+      TF_VAR_machine_type: ${{ secrets.TF_VAR_MACHINE_TYPE }}
+      TF_VAR_sql_instance_name: ${{ secrets.TF_VAR_SQL_INSTANCE_NAME }}
+      TF_VAR_db_type: ${{ secrets.TF_VAR_DB_TYPE }}
+      TF_VAR_db_name: ${{ secrets.TF_VAR_DB_NAME }}
+      TF_VAR_db_username: ${{ secrets.TF_VAR_DB_USERNAME }}
+      TF_VAR_secret_name: ${{ secrets.TF_VAR_SECRET_NAME }}
+      TF_VAR_fw_rule: ${{ secrets.TF_VAR_FW_RULE }}
+      GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v3
+
+    - name: Set up Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@v1
+      with:
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+        export_default_credentials: true
+
+    - name: Terraform Init
+      run: terraform init
+
+    - name: Terraform Format Check
+      run: terraform fmt -check
+
+    - name: Terraform Validate
+      run: terraform validate
+
+    - name: Terraform Plan
+      run: terraform plan
+
+    - name: Terraform Apply
+      if: github.ref == 'refs/heads/main'
+      run: terraform apply -auto-approve
