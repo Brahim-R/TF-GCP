@@ -1,20 +1,10 @@
 variable "project_id" {
-  type    = string
+  type = string
 }
 
 variable "region" {
   type    = string
   default = "us-east1"
-}
-
-variable "backend_bucket" {
-  type    = string
-  default = "tf_bucket_brahim"
-}
-
-variable "backend_bucket_prefix" {
-  type    = string
-  default = "terraform/state"
 }
 
 variable "vpc_name" {
