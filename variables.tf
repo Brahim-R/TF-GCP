@@ -72,7 +72,6 @@ variable "secret_name" {
 }
 
 variable "fw_rule" {
-  description = "Name of the firewall rule"
   type        = string
   default     = "postgres-firewall-rule"
 }
