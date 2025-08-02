@@ -53,3 +53,6 @@ jobs:
 
     - name: Terraform Apply
       run: terraform apply -auto-approve -var="db_name=[\"dev_db\",\"prod_db\"]"
+
+    - name: Terraform Destroy
+      run: terraform destroy
