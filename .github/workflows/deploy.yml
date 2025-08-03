@@ -11,16 +11,18 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
+      # Use valid, hardcoded names for resources since secrets are not configured.
+      # These names must be unique within your GCP project.
       TF_VAR_project_id: ${{ secrets.GCP_PROJECT_ID }}
-      TF_VAR_bucket_name: ${{ secrets.TF_VAR_BUCKET_NAME }}
-      TF_VAR_vm_name: ${{ secrets.TF_VAR_VM_NAME }}
-      TF_VAR_machine_type: ${{ secrets.TF_VAR_MACHINE_TYPE }}
-      TF_VAR_sql_instance_name: ${{ secrets.TF_VAR_SQL_INSTANCE_NAME }}
-      TF_VAR_db_type: ${{ secrets.TF_VAR_DB_TYPE }}
-      TF_VAR_db_name: ${{ secrets.TF_VAR_DB_NAME }}
-      TF_VAR_db_username: ${{ secrets.TF_VAR_DB_USERNAME }}
-      TF_VAR_secret_name: ${{ secrets.TF_VAR_SECRET_NAME }}
-      TF_VAR_fw_rule: ${{ secrets.TF_VAR_FW_RULE }}
+      TF_VAR_bucket_name: "my-unique-bucket-name-${{ github.run_id }}"
+      TF_VAR_vm_name: "my-instance-${{ github.run_id }}"
+      TF_VAR_machine_type: "e2-medium"
+      TF_VAR_sql_instance_name: "my-sql-instance"
+      TF_VAR_db_type: "POSTGRES_17"
+      TF_VAR_db_name: "app_db"
+      TF_VAR_db_username: "my_user"
+      TF_VAR_secret_name: "db-password-secret"
+      TF_VAR_fw_rule: "allow-all-rule"
       GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
 
     steps:
@@ -37,7 +39,6 @@ jobs:
 
     - name: Set up Google Cloud SDK
       uses: google-github-actions/setup-gcloud@v1
-
 
     - name: Terraform Init
       run: terraform init
