@@ -55,7 +55,9 @@ variable "database_version" {
 }
 
 variable "db_type" {
-  type = string
+  description = "The machine type for the database instance."
+  type        = string
+  default     = "db-f1-micro"
 }
 
 variable "db_name" {
