@@ -75,5 +75,3 @@ variable "fw_rule" {
   type        = string
   default     = "postgres-firewall-rule"
 }
-
-bruh what is this...
