@@ -64,7 +64,8 @@ variable "db_name" {
 }
 
 variable "db_username" {
-  type = string
+  type      = string
+  sensitive = true
 }
 
 variable "secret_name" {
@@ -72,6 +73,11 @@ variable "secret_name" {
 }
 
 variable "fw_rule" {
-  type    = string
-  default = "postgres-firewall-rule"
+  type = string
+}
+
+variable "db_firewall_tag" {
+  description = "A tag to apply to instances that need to access the database."
+  type        = string
+  default     = "db-access"
 }

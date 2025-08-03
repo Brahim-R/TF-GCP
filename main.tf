@@ -28,6 +28,7 @@ resource "google_compute_instance" "default" {
   name         = var.vm_name
   machine_type = var.machine_type
   zone         = var.zone
+  tags         = [var.db_firewall_tag] # Add the firewall tag to the VM
   boot_disk {
     initialize_params {
       image = "ubuntu-os-cloud/ubuntu-minimal-2504-amd64"
@@ -85,17 +86,17 @@ resource "google_secret_manager_secret" "my_secret" {
 resource "google_secret_manager_secret_version" "my_secret_version" {
   secret      = google_secret_manager_secret.my_secret.id
   secret_data = random_password.password.result
-  depends_on  = [google_secret_manager_secret.my_secret, random_password.password]
 }
 
 resource "google_compute_firewall" "postgres-rules" {
-  project     = var.project_id
-  name        = var.fw_rule
-  network     = data.google_compute_network.existing_vpc.self_link
-  description = "Creates firewall rule for postgres"
+  name    = var.fw_rule
+  network = data.google_compute_network.existing_vpc.self_link
 
   allow {
     protocol = "tcp"
-    ports    = ["5432", ]
+    ports    = ["5432"] # Port for PostgreSQL
   }
+
+  source_tags = [var.db_firewall_tag] # Allow traffic from instances with this tag
 }
+
